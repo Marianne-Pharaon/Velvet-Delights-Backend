@@ -7,3 +7,5 @@ exports.generateToken = (id, role) => {
   console.log(token);
   return token;
 };
+
+

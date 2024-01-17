@@ -1,5 +1,7 @@
 const Product = require("../models/Products");
-const { imageUploader } = require('../extra/imageUploader');
+const { getStorage, ref, uploadBytesResumable } = require("firebase/storage");
+const { signInWithEmailAndPassword } = require("firebase/auth");
+const imageUpload = require("../middlewares/imageUploader");
 
 
 const getAllProducts = async (req, res) => {
@@ -11,76 +13,41 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-// const addProduct = async (req, res) => {
-//   try {
-//     // Check if req.file is defined
-//     if (!req.file) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Image file is required",
-//       });
-//     }
 
-//     const imageURL = await imageUploader(req);
 
-//     // Check if imageURL is defined
-//     if (!imageURL) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Error uploading image",
-//       });
-//     }
-
-//     // Create the product with the correct property name (product_image)
-//     const product = await Product.create({
-//       ...req.body,
-//       product_image: imageURL, // Use the correct property name
-//     });
-//     res.status(200).json({
-//       success: true,
-//       message: "Product added successfully",
-//       data: product,
-//     });
-//   } catch (error) {
-//     console.error("Error adding product:", error);
-//     res.status(400).json({
-//       success: false,
-//       message: "Product not added successfully",
-//       error: error.message,
-//     });
-//   }
-// };
+// 
 
 
 
 const addProduct = async (req, res) => {
-  try {
-    const imageURL = await imageUploader(req);
+  const {
+    product_id, name, price, category_id, description, sizes_price, sizes_size
+  } = req.body;
 
-    const savedProduct = await Product.create({
-      ...req.body,
-      image: imageURL
+  try {
+    let image;
+    if (req.file) {
+      image = await imageUpload(req.file);
+    }
+    const product = await Product.create({
+      product_id,
+      name,
+      price,
+      category_id,
+      description,
+      sizes:[{price:sizes_price, size:sizes_size}],
+      image: image.downloadURL, 
     });
 
-    res.status(201).json(savedProduct);
+    if (!product) {
+      throw new Error("An error occurred during adding a new product");
+    }
+
+    res.status(200).json({ message: "New product added successfully", product });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Failed to add new product", error: error.message });
   }
 };
-
-// const addProduct = async (req, res,next) => {
-//   const {product_id, name, price, category_id, description,image, sizes}=req.body;
-//   try {
-//     const imageURL = await imageUploader(req.file);
-//         const savedProduct = await Product.create({
-//       ...req.body,
-//       image: imageURL,
-//     });
-//     res.status(201).json(savedProduct);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-// //   }
-// };
 
 
 

@@ -55,7 +55,7 @@ const getUsersByRole = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const {  fullName, email, password, phoneNumber, address, role } =
+    const {  fullName,age, email, password, phoneNumber, address, role } =
       req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -63,6 +63,7 @@ const addUser = async (req, res) => {
     const newUser = new User({
       
       fullName,
+      age,
       email,
       password: hashedPassword,
       phoneNumber,
@@ -131,6 +132,8 @@ const deleteUser = async (req, res) => {
   }
 };
 
+
+
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -174,6 +177,7 @@ const addAdmin = async (req, res) => {
 
     const newUser = new User({
       fullName,
+      age,
       email,
       password,
       // checkPassword,
@@ -202,6 +206,7 @@ const getAdmins = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
 
 module.exports = {
   getAllUsers,
