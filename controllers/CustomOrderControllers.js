@@ -1,6 +1,7 @@
 const Custom_Orders = require("../models/Custom_Orders");
 
 const createCustomOrder = async (req, res) => {
+  console.log(req.body);
   try {
     const customOrder = new Custom_Orders(req.body);
     const savedCustomOrder = await customOrder.save();

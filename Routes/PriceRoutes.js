@@ -7,9 +7,6 @@ router.post('/calculatePrice', async (req, res) => {
     try {
         // receive user selections in the request body
         const { flavor, filling, topping, size } = req.body;
-
-        // You should implement your own logic to calculate the price based on the selections
-        // This is just a placeholder, replace it with your actual calculation logic
         const basePrice = 6; 
         const additionalCost = flavor.length + filling.length + topping.length + size.length;
 

@@ -21,7 +21,7 @@ const getAllProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const {
-    product_id, name, price, category_id, description, sizes_price, sizes_size
+     name, price, category, description, sizes_price, sizes_size
   } = req.body;
 
   try {
@@ -33,7 +33,7 @@ const addProduct = async (req, res) => {
       product_id,
       name,
       price,
-      category_id,
+      category,
       description,
       sizes:[{price:sizes_price, size:sizes_size}],
       image: image.downloadURL, 
@@ -53,7 +53,7 @@ const addProduct = async (req, res) => {
 
 const getProductByID = async (req, res) => {
   try {
-    const product = await Product.find({product_id:req.params.productId});
+    const product = await Product.find({_id:req.params.Id});
     res.status(200).json({
       success: true,
       message: "Data retrieved successfully",
@@ -70,25 +70,25 @@ const getProductByID = async (req, res) => {
 
 const getProductByCategoryID = async (req, res) => {
   try {
-    const category_id = req.params.category_id;
-    const products = await Product.find({ category_id: category_id });
+    const category = req.params.category;
+    const products = await Product.find({ category: category });
 
     if (products.length === 0) {
       return res.status(404).json({
         success: false,
-        message: "Products not found for the given category_id",
+        message: "Products not found for the given category",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Products retrieved successfully by category_id",
+      message: "Products retrieved successfully by category",
       data: products,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Unable to retrieve products by category_id",
+      message: "Unable to retrieve products by category",
       error: error.message,
     });
   }
@@ -97,7 +97,7 @@ const getProductByCategoryID = async (req, res) => {
 const updateProductByID = async (req, res) => {
   try {
     const product = await Product.findOneAndUpdate(
-      {product_id: req.params.productId},
+      {_id: req.params.Id},
       {$set:req.body},
       { new: true }
     );
@@ -118,7 +118,7 @@ const updateProductByID = async (req, res) => {
 const deleteProductByID = async (req, res) => {
   try {
     const deletedProduct = await Product.findOneAndDelete(
-       {product_id:req.params.productId}
+       {_id:req.params.Id}
     );
     if (!deletedProduct) {
       return res.status(404).json({

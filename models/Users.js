@@ -4,9 +4,11 @@ const userSchema = new mongoose.Schema(
   {
     user_id: { type: Number, required: false },
     fullName: { type: String, required: true, unique: true },
-age:{type: Number, required: true},
+    age: { type: Number, required: true },
     email: {
-      type: String,   required: true, unique: true,
+      type: String,
+      required: true,
+      unique: true,
       validate: {
         validator: function (v) {
           return /^[^s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -33,7 +35,6 @@ age:{type: Number, required: true},
   },
   { timestamps: true }
 );
-
 
 userSchema.pre('save', async function (next) {
   try {

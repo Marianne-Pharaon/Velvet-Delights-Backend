@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 
 const {
     
@@ -10,7 +12,7 @@ const {
     deleteCustomOrderById,
   } = require("../controllers/CustomOrderControllers");
 
-router.post('/addcustomOrders', createCustomOrder);
+router.post('/addcustomOrders',upload.single('image'), createCustomOrder);
 router.get('/getcustomOrders', getAllCustomOrders);
 router.get('/getcustomOrders/:userId', getCustomOrderById);
 router.put('/updatecustomOrders/:userId', updateCustomOrderById);
