@@ -13,8 +13,8 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    console.log('req.params.user_id', req.params.id);
-    const user = await User.findOne({ user_id: req.params.id });
+    console.log('req.params._id', req.params.id);
+    const user = await User.findOne({ _id: req.params.id });
     console.log('query result', user);
 
     res.status(200).json({
@@ -55,7 +55,9 @@ const getUsersByRole = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const {  fullName,age, email, password, phoneNumber, address, role } =
+    const role = 'user';
+
+    const {  fullName,age, email, password, phoneNumber, address } =
       req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -90,7 +92,7 @@ const addUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { user_id: req.params.user_id },
+      { user_id: req.params._id },
       { $set: req.body },
       { new: true }
     );
@@ -137,7 +139,7 @@ const deleteUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).maxTimeMS(10000);
 
     if (!user) {
       return res.status(400).json({
@@ -155,11 +157,11 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const token = generateToken(user.user_id, user.role);
+    const token = generateToken(user._id, user.role);
     return res.status(200).json({
       success: true,
       message: `User with email ${email} logged in successfully.`,
-      data: token,
+      token: token,
     });
   } catch (error) {
     return res.status(400).json({
@@ -167,21 +169,22 @@ const loginUser = async (req, res) => {
       message: 'Unable to login.',
       error: error.message,
     });
+  
   }
 };
 const addAdmin = async (req, res) => {
   try {
     const role = 'admin';
-    const {  fullName, email, password, phoneNumber } = req.body;
+    const {  fullName, email, age, password, phoneNumber } = req.body;
     const checkPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
       fullName,
-      age,
       email,
-      password,
-      // checkPassword,
+      age,
+      password: checkPassword,
       phoneNumber,
+
       role,
     });
     await newUser.save();

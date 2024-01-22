@@ -21,7 +21,7 @@ router.post('/addusers', addUser);
 router.post("/addAdmin", addAdmin);
 router.get("/getAdmin", getAdmins);
 router.put('/updateusers/:id',isAuthenticated(["organizer", "admin"]), updateUser);
-router.delete('/deleteusers/:id',isAuthenticated(["organizer", "admin"]), deleteUser);
+router.delete('/deleteusers/:id', deleteUser);
 router.post('/loginusers', loginUser);
 
 module.exports = router;

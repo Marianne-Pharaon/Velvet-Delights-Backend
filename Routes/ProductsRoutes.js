@@ -30,8 +30,8 @@ router.get("/getproducts/:productId", getProductByID);
 router.get("/getproducts/category/:category_id", getProductByCategoryID);
 
 router.post('/addproduct', upload.single('image'),addProduct);
-router.put("/updateproducts/:productId", updateProductByID);
-router.delete("/deleteproducts/:productId", deleteProductByID);
+router.put("/updateproducts/:Id", updateProductByID);
+router.delete("/deleteproducts/:Id", deleteProductByID);
 
 
 module.exports = router;

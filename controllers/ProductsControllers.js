@@ -19,9 +19,40 @@ const getAllProducts = async (req, res) => {
 
 
 
+// const addProduct = async (req, res) => {
+//   const {
+//      name, price, category, description 
+//   } = req.body;
+
+//   try {
+//     let image;
+//     if (req.file) {
+//       image = await imageUpload(req.file);
+//     }
+//     const product = await Product.create({
+//       product_id,
+//       name,
+//       price,
+//       category,
+//       description,
+//       // sizes:[{price:sizes_price, size:sizes_size}],
+//       image: image.downloadURL, 
+//     });
+
+//     if (!product) {
+//       throw new Error("An error occurred during adding a new product");
+//     }
+
+//     res.status(200).json({ message: "New product added successfully", product });
+//   } catch (error) {
+//     res.status(500).json({ message: "Failed to add new product", error: error.message });
+//   }
+// };
+
+
 const addProduct = async (req, res) => {
   const {
-     name, price, category, description, sizes_price, sizes_size
+    name, price, category, description, 
   } = req.body;
 
   try {
@@ -30,30 +61,30 @@ const addProduct = async (req, res) => {
       image = await imageUpload(req.file);
     }
     const product = await Product.create({
-      product_id,
       name,
       price,
       category,
       description,
-      sizes:[{price:sizes_price, size:sizes_size}],
-      image: image.downloadURL, 
+      // sizes: [{ price: sizes_price, size: sizes_size }],
+      image: image.downloadURL,
     });
 
     if (!product) {
       throw new Error("An error occurred during adding a new product");
     }
 
-    res.status(200).json({ message: "New product added successfully", product });
+    res.status(201).json({ message: "New product added successfully", product });
   } catch (error) {
-    res.status(500).json({ message: "Failed to add new product", error: error.message });
+    res.status(500).json({ message: "Failed to add a new product", error: error.message });
   }
 };
 
 
 
+
 const getProductByID = async (req, res) => {
   try {
-    const product = await Product.find({_id:req.params.Id});
+    const product = await Product.findById(req.params.Id);
     res.status(200).json({
       success: true,
       message: "Data retrieved successfully",
@@ -67,6 +98,7 @@ const getProductByID = async (req, res) => {
     });
   }
 };
+
 
 const getProductByCategoryID = async (req, res) => {
   try {
@@ -94,13 +126,38 @@ const getProductByCategoryID = async (req, res) => {
   }
 };
 
+// const updateProductByID = async (req, res) => {
+//   try {
+//     const product = await Product.findOneAndUpdate(
+//       {_id: req.params.Id},
+//       {$set:req.body},
+//       { new: true }
+//     );
+//     res.status(200).json({
+//       success: true,
+//       message: "Product updated successfully",
+//       data: product,
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       success: false,
+//       message: "Product not updated successfully",
+//       error: error.message,
+//     });
+//   }
+// };
 const updateProductByID = async (req, res) => {
   try {
+    // Exclude the 'image' field from the update
+    const updateFields = { ...req.body };
+    delete updateFields.image;
+
     const product = await Product.findOneAndUpdate(
-      {_id: req.params.Id},
-      {$set:req.body},
+      { _id: req.params.Id },
+      { $set: updateFields },
       { new: true }
     );
+
     res.status(200).json({
       success: true,
       message: "Product updated successfully",
@@ -114,6 +171,7 @@ const updateProductByID = async (req, res) => {
     });
   }
 };
+
 
 const deleteProductByID = async (req, res) => {
   try {
