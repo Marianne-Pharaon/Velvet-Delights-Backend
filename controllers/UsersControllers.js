@@ -154,6 +154,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Wrong password.',
+
       });
     }
 
@@ -161,6 +162,7 @@ const loginUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: `User with email ${email} logged in successfully.`,
+      data:user,
       token: token,
     });
   } catch (error) {

@@ -81,10 +81,31 @@ const addProduct = async (req, res) => {
 
 
 
+const getProductByCategory = async (req, res) => {
+  try {
+    const products = await Product.find({ 'category': req.params.category });
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({ msg: "No products found for the specified category" });
+    }
+
+    res.json(products);
+  } catch (err) {
+    console.error(err.message);
+
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Invalid category name" });
+    }
+
+    res.status(500).send("Server Error");
+  }
+};
+
+module.exports = getProductByCategory;
 
 const getProductByID = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.Id);
+    const product = await Product.findOne(req.params.Id);
     res.status(200).json({
       success: true,
       message: "Data retrieved successfully",
@@ -207,4 +228,5 @@ module.exports = {
   updateProductByID,
   deleteProductByID,
   addProduct,
+  getProductByCategory,
 };

@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const Custom_ordersSchema = new mongoose.Schema(
   {
-    user_id: { type: Number},
+    user_id: {type: mongoose.Schema.Types.ObjectId, ref: "Users", required:true},
     totalPrice: { type: Number },
     description: { type: String },
     product_image: { type: String, maxlength: 255 },
-    flavor: [{ price: Number }],
-    topping: [{ price: Number }],
-    filling: [{ price: Number }],
-    size: [{ price: Number }],
+    flavor: [{ name: String ,price: Number }],
+    topping: [{name: String, price: Number }],
+    filling: [{name: String, price: Number }],
+    size: [{ name: String,price: Number }],
   },
   { timestamps: true }
 );

@@ -14,16 +14,17 @@ const filterCakesByPrice = async (req, res) => {
       }
   };
   
-  
   const filterCakesByCategory = async (req, res) => {
     try {
-      const categoryID = req.params.categoryID;
-      const products = await Product.find({ category_id: categoryID });
+      const categoryName = req.params.categoryName;
+      const products = await Product.find({ 'category': categoryName });
+  
       res.status(200).json({ success: true, data: products });
     } catch (error) {
       res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
   };
+  
 
 module.exports = {
  

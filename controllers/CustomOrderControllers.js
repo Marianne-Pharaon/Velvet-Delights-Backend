@@ -3,7 +3,8 @@ const Custom_Orders = require("../models/Custom_Orders");
 const createCustomOrder = async (req, res) => {
   console.log(req.body);
   try {
-    const customOrder = new Custom_Orders(req.body);
+    const customOrder = new Custom_Orders({...req.body, flavor: JSON.parse(req.body.flavor), filling: JSON.parse(req.body.filling), size:JSON.parse(req.body.size), topping:JSON.parse(req.body.topping)}
+    );
     const savedCustomOrder = await customOrder.save();
     res.status(201).json(savedCustomOrder);
   } catch (error) {

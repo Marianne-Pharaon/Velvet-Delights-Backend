@@ -6,12 +6,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      validate: {
-        validator: function (v) {
-          return /^[a-zA-Z]+ [a-zA-Z]+$/.test(v);
-        },
-        message: 'Please enter your full Name',
-      },
+      // validate: {
+      //   validator: function (v) {
+      //     return /^[a-zA-Z]+ [a-zA-Z]+$/.test(v);
+      //   },
+      //   message: 'Please enter your full Name',
+      // },
     },
     age: { type: Number, required: true },
     email: {

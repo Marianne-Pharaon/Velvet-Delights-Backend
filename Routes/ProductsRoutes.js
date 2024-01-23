@@ -11,6 +11,8 @@ const {
   updateProductByID,
   deleteProductByID,
   addProduct,
+  getProductByCategory,
+
 
 
 } = require("../controllers/ProductsControllers");
@@ -25,7 +27,7 @@ const {
 
 router.get("/getproducts", getAllProducts);
 router.get("/filterPrice",  filterCakesByPrice);
-router.get("/filterCategory", filterCakesByCategory);
+router.get('/getcategory/:categoryName', getProductByCategory);
 router.get("/getproducts/:productId", getProductByID);
 router.get("/getproducts/category/:category_id", getProductByCategoryID);
 

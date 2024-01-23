@@ -45,25 +45,29 @@ const addCheckout = async (req, res) => {
   try {
     const {
       user_id,
-      order_id,
       FullName,
       product_id,
       custom_orders_id,
       Due_date,
       total,
       address,
-      Card,
-    } = req.body;
+      NameOnCard,
+      payment,
+      CardNumber,
+        } = req.body;
 
     const checkout = new Checkout({
       user_id,
-      order_id,
+      FullName,
       product_id,
       custom_orders_id,
       Due_date,
       total,
       address,
-      Card,
+      payment,
+      NameOnCard,
+
+      CardNumber,
     });
 
     const savedCheckout = await checkout.save();

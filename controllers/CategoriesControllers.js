@@ -30,6 +30,25 @@ const getCategoryById = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+const getCategoryByName = async (req, res) => {
+  try {
+    const category = await Categories.findOne({  cat_Name: req.params. cat_Name });
+
+    if (!category) {
+      return res.status(404).json({ msg: "Category not found" });
+    }
+
+    res.json(category);
+  } catch (err) {
+    console.error(err.message);
+
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Category not found" });
+    }
+
+    res.status(500).send("Server Error");
+  }
+};
 
 // Add a new category
 const addCategory = async (req, res) => {
@@ -91,6 +110,7 @@ const deleteCategoryById = async (req, res) => {
 };
 
 module.exports = {
+  getCategoryByName,
   getAllCategories,
   getCategoryById,
   addCategory,
