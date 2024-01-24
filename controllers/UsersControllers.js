@@ -114,7 +114,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const user_id = req.params.id;
   try {
-    const result = await User.findOneAndDelete(user_id);
+    const result = await User.findByIdAndDelete(user_id); 
     if (!result) {
       return res.status(404).json({
         success: false,
@@ -133,6 +133,7 @@ const deleteUser = async (req, res) => {
     });
   }
 };
+
 
 
 
@@ -211,6 +212,9 @@ const getAdmins = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+
+
 
 
 module.exports = {

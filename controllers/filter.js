@@ -14,20 +14,35 @@ const filterCakesByPrice = async (req, res) => {
       }
   };
   
-  const filterCakesByCategory = async (req, res) => {
+  const filterProductsByCategory = async (req, res) => {
     try {
-      const categoryName = req.params.categoryName;
-      const products = await Product.find({ 'category': categoryName });
+      const category = req.params.categoryName;
+      const products = await Product.findByCategory(category);
   
-      res.status(200).json({ success: true, data: products });
+      if (products.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: `Products not found for the category: ${category}`,
+        });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: 'Products retrieved successfully by category',
+        data: products,
+      });
     } catch (error) {
-      res.status(500).json({ success: false, error: 'Internal Server Error' });
+      res.status(500).json({
+        success: false,
+        message: 'Unable to retrieve products by category',
+        error: error.message,
+      });
     }
   };
+  
   
 
 module.exports = {
  
     filterCakesByPrice,
-    filterCakesByCategory,
-};
+    filterProductsByCategory};

@@ -5,9 +5,17 @@ const productSchema = new mongoose.Schema({
   price: { type: Number,  min: 0 },
   description: { type: String, required: true },
   image: { type: String },
-  sizes: [{ price: {type:Number}, size: {type:String}}],
   category:[{type:String, required:true}],
 },{timestamps:true});
+
+productSchema.statics.findByCategory = async function(category) {
+  try {
+    const products = await this.find({ category: category });
+    return products;
+  } catch (error) {
+    throw new Error(`Error finding products by category: ${error.message}`);
+  }
+};
 
 const Product = mongoose.model('Products', productSchema);
 
