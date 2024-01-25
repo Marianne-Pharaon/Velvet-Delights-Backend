@@ -30,9 +30,10 @@ const getAllCustomOrders = async (req, res) => {
 };
 
 const getCustomOrderById = async (req, res) => {
-  const {user_Id } = req.params;
+  const { userId } = req.params.userId;
   try {
-    const customOrder = await Custom_Orders.findById(user_Id);
+    const customOrder = await Custom_Orders.findOne(userId);
+    console.log(customOrder);
     if (!customOrder) {
       return res.status(404).json({ msg: "Custom order not found" });
     }
@@ -45,6 +46,8 @@ const getCustomOrderById = async (req, res) => {
     });
   }
 };
+  
+
 
 const updateCustomOrderById = async (req, res) => {
   const { user_Id } = req.params;
